@@ -169,7 +169,9 @@ const GeneratedResumePage = () => {
   }
 
   return (
-    <div className="bg-gradient-to-r from-blue-900 to-purple-800 border-b border-purple-500 shadow-lg min-h-screen">
+    <div
+      className="bg-gradient-to-r from-blue-900 to-purple-800 border-b border-purple-500 shadow-lg min-h-screen"
+    >
       {/* Header */}
       <div className="bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-full sm:max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
@@ -178,7 +180,7 @@ const GeneratedResumePage = () => {
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-2">
                 Your Professional Resume
               </h1>
-              <p className="text-black-100 text-sm sm:text-base">
+              <p className="text-gray-500 text-sm sm:text-base">
                 Ready to download in multiple formats
               </p>
             </div>
@@ -208,35 +210,58 @@ const GeneratedResumePage = () => {
       <div className="max-w-full sm:max-w-5xl mx-auto px-2 sm:px-6 py-4 sm:py-8">
         <div className="bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden">
           {/* Resume Content */}
+          {/* 
+            PDF-SAFE AREA: 
+            All colors are set with inline hex/rgb styles to avoid oklch/skalc issues.
+          */}
           <div
             ref={resumeRef}
             className="resume-content p-3 sm:p-6 md:p-12"
             style={{
               fontFamily: 'Georgia, "Times New Roman", serif',
               minHeight: "400px",
-              background: "#fff", // Ensure white background for PDF
-              color: "#222",
+              background: "#fff", // white background
+              color: "#222",      // dark text
+              borderRadius: "0.75rem",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 10px 15px -3px rgba(30,41,59,0.1), 0 4px 6px -4px rgba(30,41,59,0.1)",
             }}
           >
             {/* Name and contact */}
-            <div className="text-center mb-6 sm:mb-8 pb-4 sm:pb-6 border-b-2 border-slate-200">
-              <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-2 sm:mb-4 tracking-tight">
+            <div
+              className="text-center mb-6 sm:mb-8 pb-4 sm:pb-6"
+              style={{
+                borderBottom: "2px solid #e2e8f0",
+              }}
+            >
+              <h1
+                className="font-bold mb-2 sm:mb-4 tracking-tight"
+                style={{
+                  fontSize: "2rem",
+                  color: "#1e293b", // slate-800
+                }}
+              >
                 {resumeData.name}
               </h1>
-              <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 md:gap-6 text-slate-600">
+              <div
+                className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 md:gap-6"
+                style={{
+                  color: "#475569", // slate-600
+                }}
+              >
                 {resumeData.email && (
-                  <span className="text-xs sm:text-sm">{resumeData.email}</span>
+                  <span style={{ fontSize: "0.9rem" }}>{resumeData.email}</span>
                 )}
                 {resumeData.phone && (
-                  <span className="text-xs sm:text-sm">{resumeData.phone}</span>
+                  <span style={{ fontSize: "0.9rem" }}>{resumeData.phone}</span>
                 )}
                 {resumeData.linkedin && (
-                  <span className="text-xs sm:text-sm">
+                  <span style={{ fontSize: "0.9rem" }}>
                     {resumeData.linkedin}
                   </span>
                 )}
                 {resumeData.location && (
-                  <span className="text-xs sm:text-sm">
+                  <span style={{ fontSize: "0.9rem" }}>
                     {resumeData.location}
                   </span>
                 )}
@@ -245,12 +270,12 @@ const GeneratedResumePage = () => {
 
             {/* Render the full AI resume as preformatted text */}
             <div
-              className="prose max-w-none text-slate-800 text-sm sm:text-base"
               style={{
                 whiteSpace: "pre-wrap",
                 fontFamily: 'Georgia, "Times New Roman", serif',
                 fontSize: "1.05rem",
                 minHeight: "300px",
+                color: "#1e293b", // slate-800
               }}
             >
               {resumeData.rawText}

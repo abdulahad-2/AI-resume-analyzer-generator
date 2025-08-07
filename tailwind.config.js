@@ -44,7 +44,7 @@ module.exports = {
           800: "#1f2937",
           900: "#111827",
         },
-        // Add other colors as needed
+        // Add other custom colors as needed
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
