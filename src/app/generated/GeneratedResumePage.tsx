@@ -4,10 +4,7 @@ import html2canvas from "html2canvas";
 import { Document, Packer, Paragraph, HeadingLevel } from "docx";
 import { useRef, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import {
-  FileText,
-  Download,
-} from "lucide-react";
+import { FileText, Download } from "lucide-react";
 
 // --- Types ---
 type ResumeData = {
@@ -17,7 +14,6 @@ type ResumeData = {
   linkedin?: string;
   location?: string;
   summary?: string;
-  
   rawText: string;
 };
 
@@ -39,7 +35,9 @@ function parseImprovedResume(resumeText: string): ResumeData {
   i++;
   if (i < lines.length) {
     const contactLine = lines[i];
-    const emailMatch = contactLine.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+    const emailMatch = contactLine.match(
+      /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/
+    );
     const phoneMatch = contactLine.match(/(\+?\d[\d\s\-()]{7,})/);
     const linkedinMatch = contactLine.match(/linkedin\.com\/[^\s|]+/i);
     email = emailMatch ? emailMatch[1] : "";
@@ -158,21 +156,21 @@ const GeneratedResumePage = () => {
     <div className="bg-gradient-to-r from-blue-900 to-purple-800 border-b border-purple-500 shadow-lg min-h-screen">
       {/* Header */}
       <div className="bg-white border-b border-slate-200 shadow-sm">
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          <div className="flex justify-between items-center">
+        <div className="max-w-full sm:max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-black mb-2">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-2">
                 Your Professional Resume
               </h1>
-              <p className="text-black-100">
+              <p className="text-black-100 text-sm sm:text-base">
                 Ready to download in multiple formats
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
               <button
                 onClick={() => handleDownload("docx")}
                 disabled={isDownloading}
-                className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-white border-2 border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
               >
                 <FileText size={18} />
                 {isDownloading ? "Preparing..." : "Download DOCX"}
@@ -180,7 +178,7 @@ const GeneratedResumePage = () => {
               <button
                 onClick={() => handleDownload("pdf")}
                 disabled={isDownloading}
-                className="flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-200 font-medium shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-200 font-medium shadow-md disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
               >
                 <Download size={18} />
                 {isDownloading ? "Preparing..." : "Download PDF"}
@@ -191,45 +189,45 @@ const GeneratedResumePage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="max-w-full sm:max-w-5xl mx-auto px-2 sm:px-6 py-4 sm:py-8">
         <div className="bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden">
           {/* Resume Content */}
           <div
             ref={resumeRef}
-            className="resume-content p-12"
+            className="resume-content p-3 sm:p-6 md:p-12"
             style={{
               fontFamily: 'Georgia, "Times New Roman", serif',
               minHeight: "400px",
             }}
           >
             {/* Name and contact */}
-            <div className="text-center mb-8 pb-6 border-b-2 border-slate-200">
-              <h1 className="text-4xl font-bold text-slate-800 mb-4 tracking-tight">
+            <div className="text-center mb-6 sm:mb-8 pb-4 sm:pb-6 border-b-2 border-slate-200">
+              <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-2 sm:mb-4 tracking-tight">
                 {resumeData.name}
               </h1>
-              <div className="flex flex-wrap justify-center items-center gap-6 text-slate-600">
+              <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 md:gap-6 text-slate-600">
                 {resumeData.email && (
-                  <span className="text-sm">{resumeData.email}</span>
+                  <span className="text-xs sm:text-sm">{resumeData.email}</span>
                 )}
                 {resumeData.phone && (
-                  <span className="text-sm">{resumeData.phone}</span>
+                  <span className="text-xs sm:text-sm">{resumeData.phone}</span>
                 )}
                 {resumeData.linkedin && (
-                  <span className="text-sm">{resumeData.linkedin}</span>
+                  <span className="text-xs sm:text-sm">{resumeData.linkedin}</span>
                 )}
                 {resumeData.location && (
-                  <span className="text-sm">{resumeData.location}</span>
+                  <span className="text-xs sm:text-sm">{resumeData.location}</span>
                 )}
               </div>
             </div>
 
             {/* Render the full AI resume as preformatted text */}
             <div
-              className="prose max-w-none text-slate-800"
+              className="prose max-w-none text-slate-800 text-sm sm:text-base"
               style={{
                 whiteSpace: "pre-wrap",
                 fontFamily: 'Georgia, "Times New Roman", serif',
-                fontSize: "1.1rem",
+                fontSize: "1.05rem",
                 minHeight: "300px",
               }}
             >
@@ -238,19 +236,19 @@ const GeneratedResumePage = () => {
           </div>
 
           {/* Bottom Actions */}
-          <div className="bg-gradient-to-r from-slate-800 to-purple-900 px-12 py-6 border-t border-purple-700">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
+          <div className="bg-gradient-to-r from-slate-800 to-purple-900 px-3 sm:px-8 md:px-12 py-4 sm:py-6 border-t border-purple-700">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                <p className="text-purple-200 font-medium">
+                <p className="text-purple-200 font-medium text-sm sm:text-base">
                   Professional resume ready for download
                 </p>
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
                 <button
                   onClick={() => handleDownload("docx")}
                   disabled={isDownloading}
-                  className="flex items-center gap-2 px-5 py-2.5 text-sm bg-white border-2 border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center justify-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm bg-white border-2 border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                 >
                   <FileText size={16} />
                   DOCX Format
@@ -258,7 +256,7 @@ const GeneratedResumePage = () => {
                 <button
                   onClick={() => handleDownload("pdf")}
                   disabled={isDownloading}
-                  className="flex items-center gap-2 px-5 py-2.5 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-200 font-medium shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center justify-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-200 font-medium shadow-md disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
                 >
                   <Download size={16} />
                   PDF Format
