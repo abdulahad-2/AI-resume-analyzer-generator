@@ -6,7 +6,6 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    // Override the default color palette to use hex/rgb (not oklch)
     colors: {
       transparent: "transparent",
       current: "currentColor",
