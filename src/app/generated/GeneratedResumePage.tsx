@@ -76,12 +76,19 @@ const GeneratedResumePage = () => {
     }
   }, [searchParams]);
 
+  // --- PDF & DOCX Download Handler ---
   const handleDownload = async (format: "pdf" | "docx") => {
-    if (!resumeRef.current) return;
+    if (!resumeRef.current) {
+      alert("Resume content not found.");
+      return;
+    }
     setIsDownloading(true);
     try {
       if (format === "pdf") {
         const element = resumeRef.current;
+        // Wait for DOM to be ready
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        // Generate canvas
         const canvas = await html2canvas(element, {
           scale: 2,
           useCORS: true,
@@ -89,20 +96,27 @@ const GeneratedResumePage = () => {
         });
         const imgData = canvas.toDataURL("image/png");
         const pdf = new jsPDF("p", "mm", "a4");
-        const imgWidth = 210;
-        const pageHeight = 295;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+
+        // Calculate image height in PDF units
+        const imgProps = pdf.getImageProperties(imgData);
+        const imgWidth = pdfWidth;
+        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
         let heightLeft = imgHeight;
         let position = 0;
 
+        // Add first page
         pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+        heightLeft -= pdfHeight;
 
+        // Add more pages if needed
         while (heightLeft > 0) {
           position = heightLeft - imgHeight;
           pdf.addPage();
           pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
+          heightLeft -= pdfHeight;
         }
 
         pdf.save(
@@ -133,15 +147,17 @@ const GeneratedResumePage = () => {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `${
-          (resumeData?.name || "Resume").replace(/\s+/g, "_")
-        }_Resume.docx`;
+        link.download = `${(resumeData?.name || "Resume").replace(
+          /\s+/g,
+          "_"
+        )}_Resume.docx`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
       }
-    } catch {
+    } catch (e) {
+      console.error("Error generating file:", e);
       alert("Error generating file. Please try again.");
     } finally {
       setIsDownloading(false);
@@ -198,6 +214,8 @@ const GeneratedResumePage = () => {
             style={{
               fontFamily: 'Georgia, "Times New Roman", serif',
               minHeight: "400px",
+              background: "#fff", // Ensure white background for PDF
+              color: "#222",
             }}
           >
             {/* Name and contact */}
@@ -213,10 +231,14 @@ const GeneratedResumePage = () => {
                   <span className="text-xs sm:text-sm">{resumeData.phone}</span>
                 )}
                 {resumeData.linkedin && (
-                  <span className="text-xs sm:text-sm">{resumeData.linkedin}</span>
+                  <span className="text-xs sm:text-sm">
+                    {resumeData.linkedin}
+                  </span>
                 )}
                 {resumeData.location && (
-                  <span className="text-xs sm:text-sm">{resumeData.location}</span>
+                  <span className="text-xs sm:text-sm">
+                    {resumeData.location}
+                  </span>
                 )}
               </div>
             </div>
