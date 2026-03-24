@@ -3,12 +3,6 @@ import path from "path";
 import { extractText, getDocumentProxy } from "unpdf";
 import mammoth from "mammoth";
 
-export const config = {
-  api: {
-    bodyParser: false, // This is explicitly for Pages Router, but good to keep it for clarity if needed
-  },
-};
-
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {

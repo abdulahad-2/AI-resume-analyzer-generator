@@ -1,16 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  eslint: {
-    // Ignore ESLint errors during the build since we validate using our own ESLint config
-    ignoreDuringBuilds: true,
-  },
   webpack: (config, { isServer }) => {
     // Handle Node.js native modules on server
     if (isServer) {
       config.externals.push(/^(?!.*\.m?js$).*\.node$/);
     }
-    
+
     // Browser fallbacks for Node.js modules
     if (!isServer) {
       config.resolve.fallback = {
@@ -26,7 +22,7 @@ const nextConfig: NextConfig = {
         path: false,
       };
     }
-    
+
     return config;
   },
 };
